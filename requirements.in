@@ -1,0 +1,5 @@
+-e git+https://github.com/OpenDataServices/flatten-tool.git@d1fe3660bcafa4dc8323bffcb1fd4951dabd43cb#egg=flattentool
+jsonschema
+strict-rfc3339
+rfc3987
+requests
