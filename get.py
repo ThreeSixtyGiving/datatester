@@ -5,6 +5,7 @@ import os
 import tempfile
 import shutil
 import traceback
+from jsonschema import validate, ValidationError
 
 acceptable_licenses = [
     'http://www.opendefinition.org/licenses/odc-pddl',
@@ -19,6 +20,8 @@ unacceptable_licenses = [
     '',
     'https://creativecommons.org/licenses/by-nc/4.0/',
 ]
+
+schema = json.loads(requests.get('https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-package-schema.json').text)
 
 def convert_spreadsheet(input_path, converted_path, file_type):
     encoding = 'utf-8'
@@ -94,6 +97,18 @@ for dataset in data_json:
     metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
     if metadata['json'] and metadata['acceptable_license']:
         os.link(json_file_name, 'data/json_acceptable_license/{}.json'.format(dataset['identifier']))
+
+    if metadata['json']:
+        try:
+                with open(json_file_name, 'r') as fp:
+                    validate(json.load(fp), schema)
+        except ValidationError:
+            metadata['valid'] = False
+        else:
+            metadata['valid'] = True
+            os.link(json_file_name, 'data/json_valid/{}.json'.format(dataset['identifier']))
+            if metadata['acceptable_license']:
+                os.link(json_file_name, 'data/json_acceptable_license_valid/{}.json'.format(dataset['identifier']))
 
     dataset['datagetter_metadata'] = metadata
 
