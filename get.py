@@ -39,29 +39,26 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         input_name = tmp_dir
     else:
         input_name = input_path
-    try:
-        flattentool.unflatten(
-            input_name,
-            output_name=converted_path,
-            input_format=file_type,
-            root_list_path='grants',
-            root_id='',
-            schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-schema.json',
-            convert_titles=True,
-            encoding=encoding
-        )
-    except Exception:
-        print("Unflattening failed for file {}".format(input_path))
-        traceback.print_exc()
-        #raise
+    flattentool.unflatten(
+        input_name,
+        output_name=converted_path,
+        input_format=file_type,
+        root_list_path='grants',
+        root_id='',
+        schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-schema.json',
+        convert_titles=True,
+        encoding=encoding
+    )
 
 #r = requests.get('http://data.threesixtygiving.org/data.json')
-#with open('data/data.json', 'w') as fp:
+#with open('data/data_original.json', 'w') as fp:
 #    fp.write(r.text)
 #data_json = r.json()
-data_json = json.load(open('data/data.json')) 
+data_json = json.load(open('data/data_original.json')) 
 
 for dataset in data_json:
+    metadata = {}
+
     if not dataset['license'] in acceptable_licenses + unacceptable_licenses:
         raise ValueError('Unrecognised license '+dataset['license'])
 
@@ -70,12 +67,31 @@ for dataset in data_json:
     r = requests.get(url)
     if len(file_type) > 5 and 'content-disposition' in r.headers:
         file_type = r.headers.get('content-disposition').split('.')[-1]
-    file_name = 'data/source/'+dataset['identifier']+'.'+file_type
+    file_name = 'data/original/'+dataset['identifier']+'.'+file_type
     with open(file_name, 'wb') as fp:
         fp.write(r.content)
 
     print(file_type)
-    convert_spreadsheet(
-        file_name,
-        'data/converted/{}.json'.format(dataset['identifier']),
-        file_type)
+    json_file_name = 'data/json/{}.json'.format(dataset['identifier'])
+    if file_type == 'json': 
+        os.link(file_name, json_file_name)
+        metadata['json'] = json_file_name
+    else:
+        try:
+            convert_spreadsheet(
+                file_name,
+                json_file_name,
+                file_type)
+        except:
+            print("Unflattening failed for file {}".format(file_name))
+            traceback.print_exc()
+            metadata['json'] = None
+        else:
+            metadata['json'] = json_file_name
+
+
+    metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
+    dataset['datagetter_metadata'] = metadata
+
+with open('data/data.json', 'w') as fp:
+    json.dump(data_json, fp, indent=4)

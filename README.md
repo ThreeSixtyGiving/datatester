@@ -11,6 +11,6 @@ pip install -r requirements.txt
 Run:
 
 ```
-mkdir -p data/converted data/source
+mkdir -p data/original data/json
 python get.py
 ```
