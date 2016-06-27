@@ -90,7 +90,11 @@ for dataset in data_json:
             metadata['json'] = json_file_name
 
 
+    
     metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
+    if metadata['json'] and metadata['acceptable_license']:
+        os.link(json_file_name, 'data/json_acceptable_license/{}.json'.format(dataset['identifier']))
+
     dataset['datagetter_metadata'] = metadata
 
 with open('data/data.json', 'w') as fp:
