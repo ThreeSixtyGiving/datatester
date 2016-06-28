@@ -53,11 +53,11 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         encoding=encoding
     )
 
-#r = requests.get('http://data.threesixtygiving.org/data.json')
-#with open('data/data_original.json', 'w') as fp:
-#    fp.write(r.text)
-#data_json = r.json()
-data_json = json.load(open('data/data_original.json')) 
+r = requests.get('http://data.threesixtygiving.org/data.json')
+with open('data/data_original.json', 'w') as fp:
+    fp.write(r.text)
+data_json = r.json()
+#data_json = json.load(open('data/data_original.json')) 
 
 for dataset in data_json:
     metadata = {}
