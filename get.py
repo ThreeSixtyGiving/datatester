@@ -75,7 +75,7 @@ for dataset in data_json:
         fp.write(r.content)
 
     print(file_type)
-    json_file_name = 'data/json/{}.json'.format(dataset['identifier'])
+    json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
     if file_type == 'json': 
         os.link(file_name, json_file_name)
         metadata['json'] = json_file_name
