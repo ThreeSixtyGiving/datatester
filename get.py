@@ -60,6 +60,10 @@ data_json = r.json()
 #data_json = json.load(open('data/data_original.json')) 
 
 for dataset in data_json:
+    ## Skip big lottery for testing
+    #if dataset['identifier'] == 'a002400000G4KGEAA3':
+    #    continue
+
     metadata = {}
 
     if not dataset['license'] in acceptable_licenses + unacceptable_licenses:
@@ -70,6 +74,7 @@ for dataset in data_json:
     r = requests.get(url)
     if len(file_type) > 5 and 'content-disposition' in r.headers:
         file_type = r.headers.get('content-disposition').split('.')[-1]
+    metadata['file_type'] = file_type
     file_name = 'data/original/'+dataset['identifier']+'.'+file_type
     with open(file_name, 'wb') as fp:
         fp.write(r.content)
