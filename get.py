@@ -5,6 +5,7 @@ import os
 import tempfile
 import shutil
 import traceback
+import strict_rfc3339
 from jsonschema import validate, ValidationError, FormatChecker
 
 acceptable_licenses = [
@@ -71,6 +72,8 @@ for dataset in data_json:
 
     url = dataset['distribution'][0]['downloadURL']
     file_type = url.split('.')[-1]
+
+    metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
     r = requests.get(url)
     if len(file_type) > 5 and 'content-disposition' in r.headers:
         file_type = r.headers.get('content-disposition').split('.')[-1]
