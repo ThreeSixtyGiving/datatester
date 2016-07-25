@@ -5,7 +5,7 @@ import os
 import tempfile
 import shutil
 import traceback
-from jsonschema import validate, ValidationError
+from jsonschema import validate, ValidationError, FormatChecker
 
 acceptable_licenses = [
     'http://www.opendefinition.org/licenses/odc-pddl',
@@ -106,7 +106,7 @@ for dataset in data_json:
     if metadata['json']:
         try:
                 with open(json_file_name, 'r') as fp:
-                    validate(json.load(fp), schema)
+                    validate(json.load(fp), schema, format_checker=FormatChecker())
         except ValidationError:
             metadata['valid'] = False
         else:
