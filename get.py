@@ -71,16 +71,21 @@ if DOWNLOAD:
     r = requests.get('http://data.threesixtygiving.org/data.json')
     with open('data/data_original.json', 'w') as fp:
         fp.write(r.text)
-    data_json = r.json()
+    data_all = r.json()
 else:
-    data_json = json.load(open('data/data.json')) 
+    data_all = json.load(open('data/data_all.json')) 
 
-for dataset in data_json:
+data_valid = []
+data_acceptable_license = []
+data_acceptable_license_valid = []
+
+for dataset in data_all:
     ## Skip big lottery for testing
     #if dataset['identifier'] == 'a002400000G4KGEAA3':
     #    continue
 
     metadata = dataset.get('datagetter_metadata', {})
+    dataset['datagetter_metadata'] = metadata
 
     if not dataset['license'] in acceptable_licenses + unacceptable_licenses:
         raise ValueError('Unrecognised license '+dataset['license'])
@@ -118,9 +123,8 @@ for dataset in data_json:
                 metadata['json'] = json_file_name
 
     metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
-    if metadata['json'] and metadata['acceptable_license']:
-        os.link(json_file_name, 'data/json_acceptable_license/{}.json'.format(dataset['identifier']))
 
+    # We can only do anything with the JSON if it did successfully convert.
     if metadata['json']:
         format_checker = FormatChecker()
         # Use a custom format checker for datetimes, like cove does
@@ -134,13 +138,26 @@ for dataset in data_json:
                 metadata['valid'] = False
             else:
                 metadata['valid'] = True
-                os.link(json_file_name, 'data/json_valid/{}.json'.format(dataset['identifier']))
-                if metadata['acceptable_license']:
-                    os.link(json_file_name, 'data/json_acceptable_license_valid/{}.json'.format(dataset['identifier']))
+        
+        if metadata['valid']:
+            os.link(json_file_name, 'data/json_valid/{}.json'.format(dataset['identifier']))
+            data_valid.append(dataset)
+            if metadata['acceptable_license']:
+                os.link(json_file_name, 'data/json_acceptable_license_valid/{}.json'.format(dataset['identifier']))
+                data_acceptable_license_valid.append(dataset)
 
-    dataset['datagetter_metadata'] = metadata
+        if metadata['acceptable_license']:
+            os.link(json_file_name, 'data/json_acceptable_license/{}.json'.format(dataset['identifier']))
+            data_acceptable_license.append(dataset)
+
 
     # Output data.json after every dataset, to help with debugging if we fail
     # part way through
-    with open('data/data.json', 'w') as fp:
-        json.dump(data_json, fp, indent=4)
+    with open('data/data_all.json', 'w') as fp:
+        json.dump(data_all, fp, indent=4)
+    with open('data/data_valid.json', 'w') as fp:
+        json.dump(data_valid, fp, indent=4)
+    with open('data/data_acceptable_license.json', 'w') as fp:
+        json.dump(data_acceptable_license, fp, indent=4)
+    with open('data/data_acceptable_license_valid.json', 'w') as fp:
+        json.dump(data_acceptable_license_valid, fp, indent=4)
