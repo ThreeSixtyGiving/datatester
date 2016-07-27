@@ -9,6 +9,10 @@ import strict_rfc3339
 import datetime
 from jsonschema import validate, ValidationError, FormatChecker
 
+DOWNLOAD = True
+CONVERT = True
+VALIDATE = True
+
 acceptable_licenses = [
     'http://www.opendefinition.org/licenses/odc-pddl',
     'https://creativecommons.org/publicdomain/zero/1.0/',
@@ -63,18 +67,20 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         encoding=encoding
     )
 
-r = requests.get('http://data.threesixtygiving.org/data.json')
-with open('data/data_original.json', 'w') as fp:
-    fp.write(r.text)
-data_json = r.json()
-#data_json = json.load(open('data/data_original.json')) 
+if DOWNLOAD:
+    r = requests.get('http://data.threesixtygiving.org/data.json')
+    with open('data/data_original.json', 'w') as fp:
+        fp.write(r.text)
+    data_json = r.json()
+else:
+    data_json = json.load(open('data/data.json')) 
 
 for dataset in data_json:
     ## Skip big lottery for testing
     #if dataset['identifier'] == 'a002400000G4KGEAA3':
     #    continue
 
-    metadata = {}
+    metadata = dataset.get('datagetter_metadata', {})
 
     if not dataset['license'] in acceptable_licenses + unacceptable_licenses:
         raise ValueError('Unrecognised license '+dataset['license'])
@@ -82,35 +88,35 @@ for dataset in data_json:
     url = dataset['distribution'][0]['downloadURL']
     file_type = url.split('.')[-1]
 
-    metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
-    r = requests.get(url)
-    if len(file_type) > 5 and 'content-disposition' in r.headers:
-        file_type = r.headers.get('content-disposition').split('.')[-1]
-    metadata['file_type'] = file_type
     file_name = 'data/original/'+dataset['identifier']+'.'+file_type
-    with open(file_name, 'wb') as fp:
-        fp.write(r.content)
-
-    print(file_type)
     json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
-    if file_type == 'json': 
-        os.link(file_name, json_file_name)
-        metadata['json'] = json_file_name
-    else:
-        try:
-            convert_spreadsheet(
-                file_name,
-                json_file_name,
-                file_type)
-        except:
-            print("Unflattening failed for file {}".format(file_name))
-            traceback.print_exc()
-            metadata['json'] = None
-        else:
+
+    if DOWNLOAD:
+        metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
+        r = requests.get(url)
+        if len(file_type) > 5 and 'content-disposition' in r.headers:
+            file_type = r.headers.get('content-disposition').split('.')[-1]
+        metadata['file_type'] = file_type
+        with open(file_name, 'wb') as fp:
+            fp.write(r.content)
+
+    if CONVERT:
+        if file_type == 'json': 
+            os.link(file_name, json_file_name)
             metadata['json'] = json_file_name
+        else:
+            try:
+                convert_spreadsheet(
+                    file_name,
+                    json_file_name,
+                    file_type)
+            except:
+                print("Unflattening failed for file {}".format(file_name))
+                traceback.print_exc()
+                metadata['json'] = None
+            else:
+                metadata['json'] = json_file_name
 
-
-    
     metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
     if metadata['json'] and metadata['acceptable_license']:
         os.link(json_file_name, 'data/json_acceptable_license/{}.json'.format(dataset['identifier']))
@@ -120,18 +126,21 @@ for dataset in data_json:
         # Use a custom format checker for datetimes, like cove does
         # This should be removed when https://github.com/ThreeSixtyGiving/standard/pull/128 is merged
         format_checker.checkers['date-time'] = (datetime_or_date, ValueError)
-        try:
+        if VALIDATE:
+            try:
                 with open(json_file_name, 'r') as fp:
                     validate(json.load(fp), schema, format_checker=format_checker)
-        except ValidationError:
-            metadata['valid'] = False
-        else:
-            metadata['valid'] = True
-            os.link(json_file_name, 'data/json_valid/{}.json'.format(dataset['identifier']))
-            if metadata['acceptable_license']:
-                os.link(json_file_name, 'data/json_acceptable_license_valid/{}.json'.format(dataset['identifier']))
+            except ValidationError:
+                metadata['valid'] = False
+            else:
+                metadata['valid'] = True
+                os.link(json_file_name, 'data/json_valid/{}.json'.format(dataset['identifier']))
+                if metadata['acceptable_license']:
+                    os.link(json_file_name, 'data/json_acceptable_license_valid/{}.json'.format(dataset['identifier']))
 
     dataset['datagetter_metadata'] = metadata
 
-with open('data/data.json', 'w') as fp:
-    json.dump(data_json, fp, indent=4)
+    # Output data.json after every dataset, to help with debugging if we fail
+    # part way through
+    with open('data/data.json', 'w') as fp:
+        json.dump(data_json, fp, indent=4)
