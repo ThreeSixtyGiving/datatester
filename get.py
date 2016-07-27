@@ -7,11 +7,14 @@ import shutil
 import traceback
 import strict_rfc3339
 import datetime
+import argparse
 from jsonschema import validate, ValidationError, FormatChecker
 
-DOWNLOAD = True
-CONVERT = True
-VALIDATE = True
+parser = argparse.ArgumentParser()
+parser.add_argument('--no-download', dest='download', action='store_false')
+parser.add_argument('--no-convert', dest='convert', action='store_false')
+parser.add_argument('--no-validate', dest='validate', action='store_false')
+args = parser.parse_args()
 
 acceptable_licenses = [
     'http://www.opendefinition.org/licenses/odc-pddl',
@@ -67,7 +70,7 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         encoding=encoding
     )
 
-if DOWNLOAD:
+if args.download:
     r = requests.get('http://data.threesixtygiving.org/data.json')
     with open('data/data_original.json', 'w') as fp:
         fp.write(r.text)
@@ -96,7 +99,7 @@ for dataset in data_all:
     file_name = 'data/original/'+dataset['identifier']+'.'+file_type
     json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
 
-    if DOWNLOAD:
+    if args.download:
         metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
         r = requests.get(url)
         if len(file_type) > 5 and 'content-disposition' in r.headers:
@@ -105,7 +108,7 @@ for dataset in data_all:
         with open(file_name, 'wb') as fp:
             fp.write(r.content)
 
-    if CONVERT:
+    if args.convert:
         if file_type == 'json': 
             os.link(file_name, json_file_name)
             metadata['json'] = json_file_name
@@ -130,7 +133,7 @@ for dataset in data_all:
         # Use a custom format checker for datetimes, like cove does
         # This should be removed when https://github.com/ThreeSixtyGiving/standard/pull/128 is merged
         format_checker.checkers['date-time'] = (datetime_or_date, ValueError)
-        if VALIDATE:
+        if args.validate:
             try:
                 with open(json_file_name, 'r') as fp:
                     validate(json.load(fp), schema, format_checker=format_checker)
