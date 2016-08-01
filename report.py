@@ -1,7 +1,7 @@
 import csv
 import json
 
-with open('data/data.json') as fp:
+with open('data/data_all.json') as fp:
     data_json = json.load(fp)
 
 with open('data/report.csv', 'w') as fp:
