@@ -2,6 +2,7 @@ import ijson
 import json
 import os
 import traceback
+from decimal import Decimal
 
 
 # We assmue that there are no one-to-many relationships besides location
@@ -9,10 +10,12 @@ def one_to_one_assumption(l):
     for x in l:
         if type(x) == list:
             assert len(x) <= 1
-            if x:
-                one_to_one_assumption(x[0])
-        if type(x) == dict:
+            one_to_one_assumption(x)
+        elif type(x) == dict:
             one_to_one_assumption(x.values())
+        else:
+            # Check we've not got the wrong types above
+            assert type(x) in [str, type(None), bool, int, Decimal]
 
 # We assume that all of a funder's grants are from the same publisher.
 publisher_by_funder = {}
@@ -56,7 +59,9 @@ for dataset in data_json:
             stream = ijson.items(fp, 'grants.item')
             for grant in stream:
                 try:
+                    # TODO: is this correct to exclude?
                     grant['beneficiaryLocation'] = None
+                    grant['recipientOrganization'][0]['location'] = None
                     check_grant_assumptions(grant, dataset)
                 except:
                     print(grant)
