@@ -17,9 +17,13 @@ def one_to_one_assumption(l):
 # We assume that all of a funder's grants are from the same publisher.
 publisher_by_funder = {}
 def funders_grants_same_publisher(grant, publisher):
-    funder = grant['recipientOrganization'][0]['id']
+    funder = grant['fundingOrganization'][0]['id']
     if funder in publisher_by_funder:
-        assert publisher['prefix'] == publisher_by_funder[funder]
+        try:
+            assert publisher['prefix'] == publisher_by_funder[funder]
+        except:
+            print(publisher['prefix'], publisher_by_funder[funder])
+            raise
     else:
         publisher_by_funder[funder] = publisher['prefix']
         
@@ -60,3 +64,6 @@ for dataset in data_json:
     except:
         traceback.print_exc()
         continue
+
+
+# TODO: check that grant ids start with prefixes
