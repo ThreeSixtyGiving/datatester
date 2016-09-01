@@ -59,9 +59,12 @@ for dataset in data_json:
             stream = ijson.items(fp, 'grants.item')
             for grant in stream:
                 try:
-                    # TODO: is this correct to exclude?
-                    grant['beneficiaryLocation'] = None
+                    if 'location' in grant['recipientOrganization'][0]:
+                        assert len(grant['recipientOrganization'][0]['location']) <= 2
                     grant['recipientOrganization'][0]['location'] = None
+                    if 'beneficiaryLocation' in grant:
+                        assert len(grant['beneficiaryLocation']) <= 8
+                    grant['beneficiaryLocation'] = None
                     check_grant_assumptions(grant, dataset)
                 except:
                     print(grant)
