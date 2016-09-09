@@ -8,6 +8,8 @@ with open('data/report.csv', 'w') as fp:
     writer = csv.DictWriter(fp, ['publisher_name', 'title', 'datetime_downloaded', 'file_type', 'converts', 'valid', 'acceptable_license'])
     writer.writeheader()
     for dataset in data_json:
+        if 'datagetter_metadata' not in dataset:
+            continue
         writer.writerow({
             'publisher_name': dataset['publisher']['name'],
             'title': dataset['title'],

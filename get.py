@@ -22,6 +22,7 @@ acceptable_licenses = [
     'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/',
     'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/',
     'https://creativecommons.org/licenses/by/4.0/',
+    'https://creativecommons.org/licenses/by-sa/3.0/',
     'https://creativecommons.org/licenses/by-sa/4.0/',
 ]
 
@@ -103,7 +104,7 @@ for dataset in data_all:
 
     if args.download:
         metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
-        r = requests.get(url)
+        r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
         if len(file_type) > 5 and 'content-disposition' in r.headers:
             file_type = r.headers.get('content-disposition').split('.')[-1]
         metadata['file_type'] = file_type

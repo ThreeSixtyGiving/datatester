@@ -40,6 +40,8 @@ publisher_access_urls = {}
 with open('data/data_valid.json') as fp:
     data_json = json.load(fp)
 for dataset in data_json:
+    print('Checking {} {}'.format(dataset['title'], dataset['identifier']))
+
     # We assume that all publishers have a non-empty prefix 
     prefix = dataset['publisher']['prefix']
     assert prefix
@@ -53,7 +55,6 @@ for dataset in data_json:
     else:
         publisher_access_urls[prefix] = distribution['accessURL']
 
-    print('Checking {} {}'.format(dataset['title'], dataset['identifier']))
     try:
         with open(os.path.join('data/json_all/{}.json'.format(dataset['identifier']))) as fp:
             stream = ijson.items(fp, 'grants.item')
@@ -65,6 +66,7 @@ for dataset in data_json:
                     if 'beneficiaryLocation' in grant:
                         assert len(grant['beneficiaryLocation']) <= 8
                     grant['beneficiaryLocation'] = None
+                    grant['classifications'] = None
                     check_grant_assumptions(grant, dataset)
                 except:
                     print(grant)
