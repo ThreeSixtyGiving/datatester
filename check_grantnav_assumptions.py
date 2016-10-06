@@ -40,7 +40,7 @@ publisher_access_urls = {}
 with open('data/data_valid.json') as fp:
     data_json = json.load(fp)
 for dataset in data_json:
-    print('Checking {} {}'.format(dataset['title'], dataset['identifier']))
+    print('Checking {}: {} ({})'.format(dataset['publisher']['name'], dataset['title'], dataset['identifier']))
 
     # We assume that all publishers have a non-empty prefix 
     prefix = dataset['publisher']['prefix']
@@ -48,6 +48,12 @@ for dataset in data_json:
     # We assume that each dataset has one distribution
     assert len(dataset['distribution'])
     distribution =  dataset['distribution'][0]
+
+    # AccessURL should start with http:// or https://
+    assert distribution['accessURL'].startswith('http://') or distribution['accessURL'].startswith('https://')
+    # Website should start with http:// or https://
+    assert dataset['publisher']['website'].startswith('http://') or dataset['publisher']['website'].startswith('https://')
+
     # We assume that all datasets from one publisher have the same:
     #   - accessURL
     if prefix in publisher_access_urls:
