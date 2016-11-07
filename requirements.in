@@ -3,3 +3,4 @@ jsonschema
 strict-rfc3339
 rfc3987
 requests
+ijson

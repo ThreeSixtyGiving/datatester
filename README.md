@@ -14,3 +14,14 @@ Run:
 mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
 python get.py
 ```
+
+## Checking downloaded data
+
+GrantNav will only work properly if certain assumptions about the downloaded
+data are correct. We have a script to help check these:
+
+```
+python check_grantnav_assumptions.py
+```
+
+If you get any lines that don't start with `Checking ` then something's gone wrong.
