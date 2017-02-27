@@ -11,9 +11,19 @@ pip install -r requirements.txt
 Run:
 
 ```
+# Warning this deletes previously downloaded data
 mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
 python get.py
 ```
+
+Generating a report of what data was downloaded/converted/valid:
+
+```
+python report.py
+```
+
+The script `run.sh` is provided for convenience. It does the run and report
+steps above, and then creates a tar.gz of the data.
 
 ## Checking downloaded data
 
