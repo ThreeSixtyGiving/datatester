@@ -87,7 +87,7 @@ data_acceptable_license_valid = []
 
 for dataset in data_all:
     ## Skip big lottery for testing
-    #if dataset['identifier'] == 'a002400000G4KGEAA3':
+    #if dataset['identifier'] == 'a002400000Z58cqAAB':
     #    continue
 
     metadata = dataset.get('datagetter_metadata', {})
