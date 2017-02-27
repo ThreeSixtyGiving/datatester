@@ -104,7 +104,11 @@ for dataset in data_all:
 
     if args.download:
         metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
-        r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
+        try:
+            r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
+        except:
+            print("\n\nDownload failed for file {}\n".format(file_name))
+            traceback.print_exc()
         if len(file_type) > 5 and 'content-disposition' in r.headers:
             file_type = r.headers.get('content-disposition').split('.')[-1]
         metadata['file_type'] = file_type
@@ -122,7 +126,7 @@ for dataset in data_all:
                     json_file_name,
                     file_type)
             except:
-                print("Unflattening failed for file {}".format(file_name))
+                print("\n\nUnflattening failed for file {}\n".format(file_name))
                 traceback.print_exc()
                 metadata['json'] = None
             else:
