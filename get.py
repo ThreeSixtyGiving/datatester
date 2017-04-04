@@ -33,6 +33,12 @@ unacceptable_licenses = [
     'https://creativecommons.org/licenses/by-nc/4.0/',
 ]
 
+CONTENT_TYPE_MAP = {
+    'application/json': 'json',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+    'text/csv': 'csv'
+}
+
 schema = json.loads(requests.get('https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-package-schema.json').text)
 
 
@@ -97,23 +103,30 @@ for dataset in data_all:
         raise ValueError('Unrecognised license '+dataset['license'])
 
     url = dataset['distribution'][0]['downloadURL']
-    file_type = url.split('.')[-1]
-
-    file_name = 'data/original/'+dataset['identifier']+'.'+file_type
-    json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
 
     if args.download:
         metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
         try:
             r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
         except:
-            print("\n\nDownload failed for file {}\n".format(file_name))
+            print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
-        if len(file_type) > 5 and 'content-disposition' in r.headers:
+        content_type = r.headers.get('content-type', '').split(';')[0].lower()
+        if content_type and content_type in CONTENT_TYPE_MAP:
+            file_type = CONTENT_TYPE_MAP[content_type]
+        elif 'content-disposition' in r.headers:
             file_type = r.headers.get('content-disposition').split('.')[-1]
+        else:
+            file_type = url.split('.')[-1]
         metadata['file_type'] = file_type
+        file_name = 'data/original/'+dataset['identifier']+'.'+file_type
         with open(file_name, 'wb') as fp:
             fp.write(r.content)
+    else:
+        file_type = metadata['file_type']
+        file_name = 'data/original/'+dataset['identifier']+'.'+file_type
+
+    json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
 
     if args.convert:
         if file_type == 'json': 
