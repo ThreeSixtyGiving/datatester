@@ -8,6 +8,7 @@ import traceback
 import strict_rfc3339
 import datetime
 import argparse
+import rfc6266  # (content-disposition header parser)
 from jsonschema import validate, ValidationError, FormatChecker
 
 parser = argparse.ArgumentParser()
@@ -115,9 +116,12 @@ for dataset in data_all:
         if content_type and content_type in CONTENT_TYPE_MAP:
             file_type = CONTENT_TYPE_MAP[content_type]
         elif 'content-disposition' in r.headers:
-            file_type = r.headers.get('content-disposition').split('.')[-1]
+            file_type = rfc6266.parse_requests_response(r).filename_unsafe.split('.')[-1]
         else:
             file_type = url.split('.')[-1]
+        if file_type not in CONTENT_TYPE_MAP.values():
+            print("\n\nUnrecognised file type {}\n".format(file_type))
+            continue
         metadata['file_type'] = file_type
         file_name = 'data/original/'+dataset['identifier']+'.'+file_type
         with open(file_name, 'wb') as fp:
