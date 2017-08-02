@@ -32,6 +32,7 @@ unacceptable_licenses = [
     # Not relicenseable as CC-BY
     'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/', 
     'https://creativecommons.org/licenses/by-nc/4.0/',
+    'https://creativecommons.org/licenses/by-nc-sa/4.0/',
 ]
 
 CONTENT_TYPE_MAP = {
