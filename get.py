@@ -153,7 +153,7 @@ for dataset in data_all:
     metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
 
     # We can only do anything with the JSON if it did successfully convert.
-    if metadata['json']:
+    if args.convert and metadata['json']:
         format_checker = FormatChecker()
         # Use a custom format checker for datetimes, like cove does
         # This should be removed when https://github.com/ThreeSixtyGiving/standard/pull/128 is merged
