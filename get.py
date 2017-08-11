@@ -2,6 +2,7 @@ import requests
 import json
 import flattentool
 import os
+import sys
 import tempfile
 import shutil
 import traceback
@@ -10,6 +11,8 @@ import datetime
 import argparse
 import rfc6266  # (content-disposition header parser)
 from jsonschema import validate, ValidationError, FormatChecker
+
+exit_status = 0
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-download', dest='download', action='store_false')
@@ -113,6 +116,7 @@ for dataset in data_all:
         except:
             print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
+            exit_status = 1
         content_type = r.headers.get('content-type', '').split(';')[0].lower()
         if content_type and content_type in CONTENT_TYPE_MAP:
             file_type = CONTENT_TYPE_MAP[content_type]
@@ -189,3 +193,5 @@ for dataset in data_all:
         json.dump(data_acceptable_license, fp, indent=4)
     with open('data/data_acceptable_license_valid.json', 'w') as fp:
         json.dump(data_acceptable_license_valid, fp, indent=4)
+
+sys.exit(exit_status)
