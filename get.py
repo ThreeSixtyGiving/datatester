@@ -55,13 +55,13 @@ def datetime_or_date(instance):
 
 
 def convert_spreadsheet(input_path, converted_path, file_type):
-    encoding = 'utf-8'
+    encoding = 'utf-8-sig'
     if file_type == 'csv':
         tmp_dir = tempfile.mkdtemp()
         destination = os.path.join(tmp_dir, 'grants.csv')
         shutil.copy(input_path, destination)
         try:
-            with open(destination, encoding='utf-8') as main_sheet_file:
+            with open(destination, encoding='utf-8-sig') as main_sheet_file:
                 main_sheet_file.read()
         except UnicodeDecodeError:
             try:
