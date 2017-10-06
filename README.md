@@ -15,7 +15,7 @@ Run:
 mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
 python get.py
 
-You might see an error- UserWarning: Discarded range with reserved name . You can happily ignore it. it's an issue with the one dataset that we know about, and it's not a problem.
+You might see different user warnings while running the script . You can happily ignore them. Run data/report.csv to review the output. 
 ```
 
 Generating a report of what data was downloaded/converted/valid:
