@@ -15,7 +15,7 @@ Run:
 mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
 python get.py
 
-You might see different user warnings while running the script . You can happily ignore them. Run data/report.csv to review the output. 
+You might see different user warnings from python while running the script. You can happily ignore most of those that don't cause the program to fail. Run data/report.csv to review what datasets have been downloaded.
 ```
 
 Generating a report of what data was downloaded/converted/valid:
