@@ -113,6 +113,7 @@ for dataset in data_all:
         metadata['datetime_downloaded'] = strict_rfc3339.now_to_rfc3339_localoffset()
         try:
             r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
+            r.raise_for_status()
         except:
             print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
