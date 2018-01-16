@@ -156,6 +156,8 @@ for dataset in data_all:
                 metadata['json'] = json_file_name
 
     metadata['acceptable_license'] = dataset['license'] in acceptable_licenses
+    if not metadata['acceptable_license']:
+        exit_status = 1
 
     # We can only do anything with the JSON if it did successfully convert.
     if args.convert and metadata['json']:
