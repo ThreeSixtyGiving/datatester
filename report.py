@@ -15,7 +15,7 @@ with open('data/report.csv', 'w') as fp:
             'title': dataset['title'],
             'file_type': dataset['datagetter_metadata']['file_type'],
             'datetime_downloaded': dataset['datagetter_metadata']['datetime_downloaded'],
-            'converts': bool(dataset['datagetter_metadata']['json']),
+            'converts': bool(dataset['datagetter_metadata']['json']) if 'json' in dataset['datagetter_metadata'] else '',
             'valid': dataset['datagetter_metadata'].get('valid', ''),
             'acceptable_license': dataset['datagetter_metadata']['acceptable_license'],
         })
