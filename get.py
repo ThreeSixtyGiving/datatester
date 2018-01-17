@@ -17,6 +17,7 @@ exit_status = 0
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-download', dest='download', action='store_false')
 parser.add_argument('--no-convert', dest='convert', action='store_false')
+parser.add_argument('--no-convert-big-files', dest='convert_big_files', action='store_false')
 parser.add_argument('--no-validate', dest='validate', action='store_false')
 args = parser.parse_args()
 
@@ -141,7 +142,10 @@ for dataset in data_all:
 
     json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
 
-    if args.convert:
+    if args.convert and (
+            args.convert_big_files or
+            os.path.getsize(file_name) < 10 * 1024 * 1024
+            ):
         if file_type == 'json': 
             os.link(file_name, json_file_name)
             metadata['json'] = json_file_name
@@ -163,7 +167,7 @@ for dataset in data_all:
         exit_status = 1
 
     # We can only do anything with the JSON if it did successfully convert.
-    if args.convert and metadata['json']:
+    if metadata.get('json'):
         format_checker = FormatChecker()
         # Use a custom format checker for datetimes, like cove does
         # This should be removed when https://github.com/ThreeSixtyGiving/standard/pull/128 is merged
