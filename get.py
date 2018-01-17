@@ -118,6 +118,9 @@ for dataset in data_all:
             print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
             exit_status = 1
+            metadata['downloads'] = False
+        else:
+            metadata['downloads'] = True
         content_type = r.headers.get('content-type', '').split(';')[0].lower()
         if content_type and content_type in CONTENT_TYPE_MAP:
             file_type = CONTENT_TYPE_MAP[content_type]
