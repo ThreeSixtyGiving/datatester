@@ -13,10 +13,10 @@ with open('data/report.csv', 'w') as fp:
         writer.writerow({
             'publisher_name': dataset['publisher']['name'],
             'title': dataset['title'],
-            'file_type': dataset['datagetter_metadata']['file_type'],
+            'file_type': dataset['datagetter_metadata'].get('file_type'),
             'datetime_downloaded': dataset['datagetter_metadata']['datetime_downloaded'],
             'downloads': dataset['datagetter_metadata']['downloads'],
             'converts': bool(dataset['datagetter_metadata']['json']) if 'json' in dataset['datagetter_metadata'] else '',
             'valid': dataset['datagetter_metadata'].get('valid', ''),
-            'acceptable_license': dataset['datagetter_metadata']['acceptable_license'],
+            'acceptable_license': dataset['datagetter_metadata'].get('acceptable_license'),
         })
