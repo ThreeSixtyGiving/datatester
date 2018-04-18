@@ -48,13 +48,6 @@ CONTENT_TYPE_MAP = {
 schema = json.loads(requests.get('https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-package-schema.json').text)
 
 
-def datetime_or_date(instance):
-    result = strict_rfc3339.validate_rfc3339(instance)
-    if result:
-        return result
-    return datetime.datetime.strptime(instance, "%Y-%m-%d")
-
-
 def convert_spreadsheet(input_path, converted_path, file_type):
     encoding = 'utf-8-sig'
     if file_type == 'csv':
@@ -169,9 +162,6 @@ for dataset in data_all:
     # We can only do anything with the JSON if it did successfully convert.
     if metadata.get('json'):
         format_checker = FormatChecker()
-        # Use a custom format checker for datetimes, like cove does
-        # This should be removed when https://github.com/ThreeSixtyGiving/standard/pull/128 is merged
-        format_checker.checkers['date-time'] = (datetime_or_date, ValueError)
         if args.validate:
             try:
                 with open(json_file_name, 'r') as fp:
