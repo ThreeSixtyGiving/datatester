@@ -10,7 +10,8 @@ import strict_rfc3339
 import datetime
 import argparse
 import rfc6266  # (content-disposition header parser)
-from jsonschema import validate, ValidationError, FormatChecker
+from urllib.parse import urlparse, urljoin
+from jsonschema import validate, ValidationError, FormatChecker, RefResolver
 
 exit_status = 0
 
@@ -19,6 +20,7 @@ parser.add_argument('--no-download', dest='download', action='store_false')
 parser.add_argument('--no-convert', dest='convert', action='store_false')
 parser.add_argument('--no-convert-big-files', dest='convert_big_files', action='store_false')
 parser.add_argument('--no-validate', dest='validate', action='store_false')
+parser.add_argument('--schema-dir-url', default='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/duration-revert/schema/')
 args = parser.parse_args()
 
 acceptable_licenses = [
@@ -45,8 +47,56 @@ CONTENT_TYPE_MAP = {
     'text/csv': 'csv'
 }
 
-schema = json.loads(requests.get('https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-package-schema.json').text)
 
+class CustomRefResolver(RefResolver):
+    '''
+    This RefResolver is only for use with the jsonschema library.
+
+    Borrowed from CoVE: https://github.com/OpenDataServices/cove/blob/d831de71ebdff027bf74f5a947db47423b101146/cove/lib/common.py#L53
+    
+    '''
+    def __init__(self, *args, **kw):
+        # this is the name of the json file that you want replaced i.e release-schema.json
+        self.file_schema_name = kw.pop('file_schema_name', '')
+        # the path on the disk of the file you want to replace the ref
+        self.schema_file = kw.pop('schema_file', None)
+        # the url of the path to the schema. i.e http://standard.open-contracting.org/schema/1__1__1/
+        # the name of the schema file is appended to this to make the full url.
+        # this is ignored when you supply a file
+        self.schema_url = kw.pop('schema_url', '')
+        super().__init__(*args, **kw)
+
+    def resolve_remote(self, uri):
+        schema_name = uri.split('/')[-1]
+        if self.schema_file and self.file_schema_name == schema_name:
+            uri = self.schema_file
+        else:
+            uri = urljoin(self.schema_url, schema_name)
+
+        document = self.store.get(uri)
+
+        if document:
+            return document
+        if uri.startswith("http"):
+            return super().resolve_remote(uri)
+        else:
+            with open(uri) as schema_file:
+                result = json.load(schema_file)
+
+        add_is_codelist(result)
+        self.store[uri] = result
+        return result
+
+
+def datetime_or_date(instance):
+    result = strict_rfc3339.validate_rfc3339(instance)
+    if result:
+        return result
+    return datetime.datetime.strptime(instance, "%Y-%m-%d")
+
+
+schema = json.loads(requests.get(urljoin(args.schema_dir_url, '360-giving-package-schema.json')).text)
+resolver = CustomRefResolver('', {}, schema_url=args.schema_dir_url)
 
 def convert_spreadsheet(input_path, converted_path, file_type):
     encoding = 'utf-8-sig'
@@ -73,7 +123,7 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         input_format=file_type,
         root_list_path='grants',
         root_id='',
-        schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-schema.json',
+        schema=urljoin(args.schema_dir_url, '360-giving-schema.json'),
         convert_titles=True,
         encoding=encoding
     )
@@ -165,7 +215,7 @@ for dataset in data_all:
         if args.validate:
             try:
                 with open(json_file_name, 'r') as fp:
-                    validate(json.load(fp), schema, format_checker=format_checker)
+                    validate(json.load(fp), schema, format_checker=format_checker, resolver=resolver)
             except ValidationError:
                 metadata['valid'] = False
             else:
