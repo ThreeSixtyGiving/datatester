@@ -1,0 +1,23 @@
+sudo: false
+language: python
+python:
+  - "3.5"
+install: pip install -r requirements.txt
+script:
+  - mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
+  - python get.py --no-convert-big-files
+  - python report.py
+  - python stats.py
+before_deploy:
+  - mkdir -p deploy/branch/$TRAVIS_BRANCH
+  - cp data/data_all.json data/report.csv data/stats.json deploy/branch/$TRAVIS_BRANCH
+deploy:
+  provider: gcs
+  access_key_id: "$ACCESS_KEY"
+  secret_access_key: "$SECRET"
+  bucket: "datagetter-360giving-output"
+  skip_cleanup: true
+  acl: public-read
+  local-dir: deploy
+  on:
+    all_branches: true
