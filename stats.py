@@ -16,7 +16,7 @@ for dataset in data_all:
             aggregates[k+'_count'] = len(v)
             del aggregates[k]
     aggregates = {k:sorted(list(v)) if isinstance(v, set) else v for k,v in aggregates.items()}
-    stats.append(aggregates)
+    dataset['datagetter_stats'] = aggregates
+    stats.append(dataset)
     with open('data/stats.json', 'w') as fp:
-        json.dump(stats, fp, indent='  ')
-        
+        json.dump(stats, fp, indent='  ', sort_keys=True)
