@@ -6,8 +6,8 @@ install: pip install -r requirements.txt
 script:
   - mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
   - python get.py --no-convert-big-files
-  - python report.py
   - python stats.py
+  - python report.py
 before_deploy:
   - mkdir -p deploy/branch/$TRAVIS_BRANCH
   - cp data/data_all.json data/report.csv data/stats.json deploy/branch/$TRAVIS_BRANCH
