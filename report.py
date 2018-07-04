@@ -32,5 +32,5 @@ with open('data/report.csv', 'w') as fp:
             'distinct_funding_org_identifier_count': stats.get('distinct_funding_org_identifier_count'),
             'distinct_recipient_org_identifier_count': stats.get('distinct_recipient_org_identifier_count'),
             'min_award_date': stats.get('min_award_date'),
-            'max_award_date': stats.get('min_award_date'),
+            'max_award_date': stats.get('max_award_date'),
         })
