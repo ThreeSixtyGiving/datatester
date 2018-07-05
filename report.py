@@ -6,9 +6,10 @@ with open('data/stats.json') as fp:
 
 with open('data/report.csv', 'w') as fp:
     writer = csv.DictWriter(fp, [
-        'publisher_name', 'title', 'downloadURL', 'datetime_downloaded',
-        'file_type', 'downloads', 'converts', 'valid', 'acceptable_license',
-        'count', 'unique_ids_count', 'distinct_funding_org_identifier_count',
+        'publisher_prefix', 'publisher_name', 'title', 'accessURL',
+        'downloadURL', 'datetime_downloaded', 'file_type', 'downloads',
+        'converts', 'valid', 'acceptable_license', 'count', 'unique_ids_count',
+        'distinct_funding_org_identifier_count',
         'distinct_recipient_org_identifier_count', 'min_award_date',
         'max_award_date',
     ])
@@ -18,8 +19,10 @@ with open('data/report.csv', 'w') as fp:
             continue
         stats = dataset.get('datagetter_stats', {})
         writer.writerow({
+            'publisher_prefix': dataset['publisher']['prefix'],
             'publisher_name': dataset['publisher']['name'],
             'title': dataset['title'],
+            'accessURL': dataset['distribution'][0]['accessURL'],
             'downloadURL': dataset['distribution'][0]['downloadURL'],
             'file_type': dataset['datagetter_metadata'].get('file_type'),
             'datetime_downloaded': dataset['datagetter_metadata']['datetime_downloaded'],
