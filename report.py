@@ -2,7 +2,7 @@ import csv
 import json
 from collections import defaultdict
 
-with open('data/stats.json') as fp:
+with open('data/status.json') as fp:
     data_json = json.load(fp)
 
 with open('data/report.csv', 'w') as fp:
@@ -21,7 +21,7 @@ with open('data/report.csv', 'w') as fp:
     for dataset in data_json:
         if 'datagetter_metadata' not in dataset:
             continue
-        stats = dataset.get('datagetter_stats', {})
+        stats = dataset.get('datagetter_aggregates', {})
 
         currencies = stats.get('currencies', {})
         not_GBP = defaultdict(list)
