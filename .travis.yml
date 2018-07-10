@@ -4,11 +4,8 @@ python:
   - "3.5"
 install: pip install -r requirements.txt
 script:
-  - mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
   # Don't convert big file becasue Travis doesn't have the RAM
-  - travis_wait 30 python get.py --no-convert-big-files
-  - python stats.py
-  - python report.py
+  - travis_wait 60 ./run.sh --no-convert-big-files
 before_deploy:
   - mkdir -p deploy/branch/$TRAVIS_BRANCH
   - cp data/data_all.json data/report.csv data/stats.json deploy/branch/$TRAVIS_BRANCH
