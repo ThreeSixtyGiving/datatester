@@ -1,0 +1,22 @@
+sudo: false
+language: python
+python:
+  - "3.5"
+install: pip install -r requirements.txt
+script:
+  # Don't convert big file becasue Travis doesn't have the RAM
+  - travis_wait 60 ./run.sh --no-convert-big-files
+before_deploy:
+  - mkdir -p deploy/branch/$TRAVIS_BRANCH
+  - cp data/data_all.json data/report.csv data/status.json deploy/branch/$TRAVIS_BRANCH
+deploy:
+  provider: gcs
+  access_key_id: "$ACCESS_KEY"
+  secret_access_key: "$SECRET"
+  bucket: "datagetter-360giving-output"
+  skip_cleanup: true
+  acl: public-read
+  local-dir: deploy
+  cache_control: private
+  on:
+    all_branches: true
