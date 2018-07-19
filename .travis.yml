@@ -10,13 +10,18 @@ before_deploy:
   - mkdir -p deploy/branch/$TRAVIS_BRANCH
   - cp data/data_all.json data/report.csv data/status.json deploy/branch/$TRAVIS_BRANCH
 deploy:
-  provider: gcs
-  access_key_id: "$ACCESS_KEY"
-  secret_access_key: "$SECRET"
-  bucket: "datagetter-360giving-output"
-  skip_cleanup: true
-  acl: public-read
-  local-dir: deploy
-  cache_control: private
-  on:
-    all_branches: true
+  - provider: gcs
+    access_key_id: "$ACCESS_KEY"
+    secret_access_key: "$SECRET"
+    bucket: "datagetter-360giving-output"
+    skip_cleanup: true
+    acl: public-read
+    local-dir: deploy
+    cache_control: private
+    on:
+      all_branches: true
+  - provider: script
+    skip_cleanup: true
+    script: ./gist.sh
+    on:
+      branch: master
