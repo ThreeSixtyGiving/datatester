@@ -26,3 +26,9 @@ deploy:
     script: ./gist.sh
     on:
       branch: master
+notifications:
+  email:
+    recipients:
+      - code@opendataservices.coop
+    on_success: never # default: change
+    on_failure: always # default: always
