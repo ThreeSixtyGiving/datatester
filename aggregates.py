@@ -1,6 +1,25 @@
 import json
 from cove_360.lib.threesixtygiving import get_grants_aggregates
 
+def none_keys_to_str(x):
+    '''
+    Walk a dict or list and replace any `None` keys with `'None'`.
+
+    Replacement is done in place.
+
+    '''
+    if hasattr(x, 'items'):
+        for key, value in x.items():
+            if key is None:
+                del x[key]
+                x[str(key)] = value
+            none_keys_to_str(value)
+    elif isinstance(x, str):
+        return
+    elif hasattr(x, '__iter__'):
+        for item in x:
+            none_keys_to_str(item)
+
 data_all = json.load(open('data/data_all.json')) 
 stats = []
 
@@ -19,6 +38,7 @@ for dataset in data_all:
                     del aggregates[k]
         aggregates = {k:sorted(list(v)) if isinstance(v, set) else v for k,v in aggregates.items()}
         dataset['datagetter_aggregates'] = aggregates
+    none_keys_to_str(dataset)
     stats.append(dataset)
     with open('data/status.json', 'w') as fp:
         json.dump(stats, fp, indent='  ', sort_keys=True)
