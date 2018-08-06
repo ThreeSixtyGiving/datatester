@@ -5,6 +5,7 @@ mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_accepta
 echo 'Fetching and converting data'
 python get.py $@
 python aggregates.py
+python coverage.py
 echo 'Generating report.csv'
 python report.py
 echo 'Creating tarball'
