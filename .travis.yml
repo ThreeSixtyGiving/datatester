@@ -9,7 +9,7 @@ script:
   - python big_files_hardcoded/insert.py
 before_deploy:
   - mkdir -p deploy/branch/$TRAVIS_BRANCH
-  - cp data/data_all.json data/report.csv data/status.json deploy/branch/$TRAVIS_BRANCH
+  - cp data/data_all.json data/report.csv data/status.json data/coverage.json deploy/branch/$TRAVIS_BRANCH
 deploy:
   - provider: gcs
     access_key_id: "$ACCESS_KEY"
