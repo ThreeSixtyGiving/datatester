@@ -8,7 +8,7 @@ script:
   - travis_wait 60 ./run.sh --no-convert-big-files
 before_deploy:
   - mkdir -p deploy/branch/$TRAVIS_BRANCH
-  - cp data/data_all.json data/report.csv data/status.json deploy/branch/$TRAVIS_BRANCH
+  - cp data/data_all.json data/report.csv data/status.json data/coverage.json deploy/branch/$TRAVIS_BRANCH
 deploy:
   - provider: gcs
     access_key_id: "$ACCESS_KEY"
