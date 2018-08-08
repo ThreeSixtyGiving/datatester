@@ -132,9 +132,11 @@ for dataset in data_all:
 
     json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
 
+    metadata['file_size'] = os.path.getsize(file_name)
+
     if args.convert and (
             args.convert_big_files or
-            os.path.getsize(file_name) < 10 * 1024 * 1024
+            metadata['file_size'] < 10 * 1024 * 1024
             ):
         if file_type == 'json': 
             os.link(file_name, json_file_name)
