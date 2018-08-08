@@ -73,7 +73,10 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         root_id='',
         schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-schema.json',
         convert_titles=True,
-        encoding=encoding
+        encoding=encoding,
+        metatab_schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-package-schema.json',
+        metatab_name='Meta',
+        metatab_vertical_orientation=True,
     )
 
 if args.download:
