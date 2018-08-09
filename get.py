@@ -109,6 +109,8 @@ for dataset in data_all:
         try:
             r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
             r.raise_for_status()
+        except KeyboardInterrupt:
+            raise
         except:
             print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
@@ -150,6 +152,8 @@ for dataset in data_all:
                     file_name,
                     json_file_name,
                     file_type)
+            except KeyboardInterrupt:
+                raise
             except:
                 print("\n\nUnflattening failed for file {}\n".format(file_name))
                 traceback.print_exc()
