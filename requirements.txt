@@ -1,4 +1,4 @@
--e git+https://github.com/OpenDataServices/flatten-tool.git@a2e8cfa4210187e5e381f6b461479926aed7a3fd#egg=flattentool
+-e git+https://github.com/OpenDataServices/flatten-tool.git@ba7727e131da5d3a2e4d794aa47fd5dd0cf71500#egg=flattentool
 -e git+https://github.com/OpenDataServices/cove.git@67a7efe1e688f443b5fc8a3a3ed1f93e4085b875#egg=cove
 jsonschema==2.6.0
 strict-rfc3339==0.7
@@ -13,7 +13,7 @@ certifi==2018.1.18
 chardet==3.0.4
 CommonMark==0.7.4
 dealer==2.0.5
-Django==1.11.11
+Django==1.11.15
 django-bootstrap3==9.1.0
 django-debug-toolbar==1.9.1
 django-environ==0.4.4
