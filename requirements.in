@@ -1,4 +1,4 @@
--e git+https://github.com/OpenDataServices/flatten-tool.git@v0.1.2#egg=flattentool
+-e git+https://github.com/OpenDataServices/flatten-tool.git@v0.2.0#egg=flattentool
 -e git+https://github.com/OpenDataServices/cove.git@67a7efe1e688f443b5fc8a3a3ed1f93e4085b875#egg=cove
 jsonschema
 strict-rfc3339
