@@ -54,12 +54,15 @@ for dataset in data_json:
     # Website should start with http:// or https://
     assert dataset['publisher']['website'].startswith('http://') or dataset['publisher']['website'].startswith('https://')
 
-    # We assume that all datasets from one publisher have the same:
-    #   - accessURL
-    if prefix in publisher_access_urls:
-        assert distribution['accessURL'] == publisher_access_urls[prefix]
-    else:
-        publisher_access_urls[prefix] = distribution['accessURL']
+    ## We assume that all datasets from one publisher have the same:
+    ##   - accessURL
+    # This check is CURRENTLY DISABLED, as we know there are now some exceptions to this rule
+    # They don't display amazingly on GrantNav atm, but this is a traedoff we've chosen to make
+    # See internal issue https://opendataservices.plan.io/issues/12170#note-17
+    #if prefix in publisher_access_urls:
+    #    assert distribution['accessURL'] == publisher_access_urls[prefix]
+    #else:
+    #    publisher_access_urls[prefix] = distribution['accessURL']
 
     try:
         with open(os.path.join('data/json_all/{}.json'.format(dataset['identifier']))) as fp:
