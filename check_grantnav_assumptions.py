@@ -77,6 +77,8 @@ for dataset in data_json:
                 except:
                     print(grant)
                     raise
+    except KeyboardInterrupt:
+        raise
     except:
         traceback.print_exc()
         continue
