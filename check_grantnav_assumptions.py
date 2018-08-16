@@ -9,7 +9,10 @@ from decimal import Decimal
 def one_to_one_assumption(l):
     for x in l:
         if type(x) == list:
-            assert len(x) <= 1
+            if len(x) == 2 and x[0] == x[1]:
+                print('WARNING, Duplicate lines')
+            else:
+                assert len(x) <= 1
             one_to_one_assumption(x)
         elif type(x) == dict:
             one_to_one_assumption(x.values())
