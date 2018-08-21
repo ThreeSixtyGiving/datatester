@@ -73,7 +73,10 @@ def convert_spreadsheet(input_path, converted_path, file_type):
         root_id='',
         schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-schema.json',
         convert_titles=True,
-        encoding=encoding
+        encoding=encoding,
+        metatab_schema='https://raw.githubusercontent.com/ThreeSixtyGiving/standard/master/schema/360-giving-package-schema.json',
+        metatab_name='Meta',
+        metatab_vertical_orientation=True,
     )
 
 if args.download:
@@ -106,6 +109,8 @@ for dataset in data_all:
         try:
             r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
             r.raise_for_status()
+        except KeyboardInterrupt:
+            raise
         except:
             print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
@@ -132,9 +137,11 @@ for dataset in data_all:
 
     json_file_name = 'data/json_all/{}.json'.format(dataset['identifier'])
 
+    metadata['file_size'] = os.path.getsize(file_name)
+
     if args.convert and (
             args.convert_big_files or
-            os.path.getsize(file_name) < 10 * 1024 * 1024
+            metadata['file_size'] < 10 * 1024 * 1024
             ):
         if file_type == 'json': 
             os.link(file_name, json_file_name)
@@ -145,6 +152,8 @@ for dataset in data_all:
                     file_name,
                     json_file_name,
                     file_type)
+            except KeyboardInterrupt:
+                raise
             except:
                 print("\n\nUnflattening failed for file {}\n".format(file_name))
                 traceback.print_exc()

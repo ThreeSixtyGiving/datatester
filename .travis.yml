@@ -6,6 +6,7 @@ install: pip install -r requirements.txt
 script:
   # Don't convert big file becasue Travis doesn't have the RAM
   - travis_wait 60 ./run.sh --no-convert-big-files
+  - python big_files_hardcoded/insert.py
 before_deploy:
   - mkdir -p deploy/branch/$TRAVIS_BRANCH
   - cp data/data_all.json data/report.csv data/status.json data/coverage.json deploy/branch/$TRAVIS_BRANCH
