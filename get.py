@@ -170,7 +170,7 @@ for dataset in data_all:
             try:
                 with open(json_file_name, 'r') as fp:
                     validate(json.load(fp), schema, format_checker=format_checker)
-            except ValidationError:
+            except (JSONDecodeError, ValidationError):
                 metadata['valid'] = False
             else:
                 metadata['valid'] = True
