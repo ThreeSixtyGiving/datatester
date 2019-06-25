@@ -36,7 +36,7 @@
     },
     "datagetter_metadata": {
       "acceptable_license": true,
-      "datetime_downloaded": "2018-08-08T17:09:01+01:00",
+      "datetime_downloaded": "2019-01-31T16:07:49+00:00",
       "downloads": true,
       "file_size": 102262174,
       "file_type": "csv",
@@ -46,22 +46,22 @@
     "description": "This is a large download file",
     "distribution": [
       {
-        "accessURL": "https://www.biglotteryfund.org.uk/research/open-data",
-        "downloadURL": "https://www.biglotteryfund.org.uk/-/media/Files/Research%20Documents/aOpenDataFiles/BLFOpenData_2004_2015_V41.csv",
-        "title": "Big Lottery Fund - grants data 2004 - 2015 (100MB+)"
+        "accessURL": "https://www.tnlcommunityfund.org.uk/data",
+        "downloadURL": "https://www.tnlcommunityfund.org.uk/media/open-data/TNLCF_Grant_Data_2004-2015-v41.csv",
+        "title": "Grants data 2004 - 2015 (CSV, 100MB+)"
       }
     ],
     "identifier": "a002400000Z58cqAAB",
     "issued": "2016-04-22",
     "license": "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
     "license_name": "Open Government Licence 3.0 (United Kingdom)",
-    "modified": "2018-08-03T10:26:29+0000",
+    "modified": "2019-01-29T12:52:35.000+0000",
     "publisher": {
-      "logo": "http://www.threesixtygiving.org/wp-content/uploads/big-lottery-fund.png",
-      "name": "The Big Lottery Fund",
-      "prefix": "360G-blf",
-      "website": "https://www.biglotteryfund.org.uk/"
+      "logo": "https://www.threesixtygiving.org/wp-content/uploads/National_Lottery_Community_Fund_logo.png",
+      "name": "The National Lottery Community Fund",
+      "prefix": "360G-tnlcomfund",
+      "website": "https://www.tnlcommunityfund.org.uk/"
     },
-    "title": "Big Lottery Fund - grants data 2004 - 2015 (100MB+)"
+    "title": "Grants data 2004 - 2015 (CSV, 100MB+)"
   }
 }
