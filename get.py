@@ -96,6 +96,10 @@ for dataset in data_all:
     #if dataset['identifier'] == 'a002400000Z58cqAAB':
     #    continue
 
+    # Make sure request object is reset each time
+    # This should cause any unhandled errors to the surface
+    r = None
+
     metadata = dataset.get('datagetter_metadata', {})
     dataset['datagetter_metadata'] = metadata
 
@@ -109,14 +113,19 @@ for dataset in data_all:
         try:
             r = requests.get(url, headers={'User-Agent': 'datagetter (https://github.com/ThreeSixtyGiving/datagetter)'})
             r.raise_for_status()
-        except KeyboardInterrupt:
-            raise
-        except:
+
+            metadata['downloads'] = True
+        except Exception as e:
+            if isinstance(e, KeyboardInterrupt):
+                raise
+
             print("\n\nDownload failed for dataset {}\n".format(dataset['identifier']))
             traceback.print_exc()
             metadata['downloads'] = False
-        else:
-            metadata['downloads'] = True
+
+            if not isinstance(e, requests.exceptions.HTTPError):
+                continue
+
         content_type = r.headers.get('content-type', '').split(';')[0].lower()
         if content_type and content_type in CONTENT_TYPE_MAP:
             file_type = CONTENT_TYPE_MAP[content_type]
