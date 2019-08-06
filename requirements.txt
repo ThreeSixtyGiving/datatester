@@ -1,38 +1,51 @@
--e git+https://github.com/OpenDataServices/flatten-tool.git@v0.2.0#egg=flattentool
--e git+https://github.com/OpenDataServices/cove.git@67a7efe1e688f443b5fc8a3a3ed1f93e4085b875#egg=cove
-jsonschema==2.6.0
-strict-rfc3339==0.7
-rfc3987==1.3.7
-rfc6266==0.0.4
-requests==2.18.4
-ijson==2.3
+
+-e git+https://github.com/threesixtygiving/datagetter.git@e66952cc40c86edc4d3d0ca1cac1d9f8523aa182#egg=datagetter
+#  These are currently requirements for cove (which are not availabe on pypi)
+#  see https://github.com/OpenDataServices/cove/blob/master/requirements.in
+#Django<1.12
+##########^^ rq.filter: <1.12
+-e git+https://github.com/OpenDataServices/flatten-tool.git@524f437abe48d7f9b8a2d6a1cf6fa9a49d002b0f#egg=flattentool
+-e git+https://github.com/open-contracting/lib-cove-ocds.git@e2f14a5dc389ac5c46cc58e90f30ea902d0768fc#egg=libcoveocds
+-e git+https://github.com/OpenDataServices/lib-cove-web.git@a0609d0f7b6b410c928454e6aa7eb0234ca47da4#egg=libcoveweb
+-e git+https://github.com/OpenDataServices/lib-cove.git@213e5fe3145ab186e34db325d4f40fe051755b84#egg=libcove
+-e git+https://github.com/OpenDataServices/cove.git@33999d0cda0e0db68a77edd2ea9502baab6d39a1#egg=cove
+#  end cove requirements
+ijson==2.4
 ## The following requirements were added by pip freeze:
-bleach==2.1.3
-cached-property==1.4.0
-certifi==2018.1.18
+attrs==19.1.0
+bleach==3.1.0
+cached-property==1.5.1
+certifi==2019.6.16
 chardet==3.0.4
-CommonMark==0.7.4
-dealer==2.0.5
-Django==1.11.15
-django-bootstrap3==9.1.0
-django-debug-toolbar==1.9.1
-django-environ==0.4.4
+commonmark==0.9.0
+contextlib2==0.5.5
+dealer==2.1.0
+Django==2.2.4
+django-bootstrap3==11.1.0
+django-debug-toolbar==2.0
+django-environ==0.4.5
 et-xmlfile==1.0.1
-future==0.16.0
-html5lib==1.0.1
-idna==2.6
-jdcal==1.3
+future==0.17.1
+idna==2.8
+jdcal==1.4.1
 json-merge-patch==0.2
-jsonref==0.1
+jsonref==0.2
+jsonschema==3.0.2
 LEPL==5.1.3
-lxml==4.2.1
-openpyxl==2.5.5
-python-dateutil==2.7.3
-pytz==2018.3
-raven==6.6.0
-schema==0.6.7
-six==1.11.0
-sqlparse==0.2.4
-urllib3==1.22
+lxml==4.4.0
+openpyxl==2.6.2
+pyrsistent==0.15.4
+python-dateutil==2.8.0
+pytz==2019.2
+rangedict==0.1.6
+raven==6.10.0
+requests==2.22.0
+rfc3987==1.3.8
+rfc6266==0.0.4
+schema==0.7.0
+six==1.12.0
+sqlparse==0.3.0
+strict-rfc3339==0.7
+urllib3==1.25.3
 webencodings==0.5.1
-xmltodict==0.11.0
+xmltodict==0.12.0

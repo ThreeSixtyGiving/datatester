@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 rm -r data || true
-mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
 echo 'Fetching and converting data'
-python get.py $@
+echo $PATH
+datagetter.py $@
 python aggregates.py
 python coverage.py
 echo 'Generating report.csv'
