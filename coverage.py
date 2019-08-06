@@ -33,17 +33,22 @@ schema_fields = schema_obj.get_release_pkg_schema_fields()
 for dataset in data_all:
     json_filename = dataset['datagetter_metadata'].get('json')
     if json_filename:
-        with open(json_filename) as fp:
-            json_data = json.load(fp)
-            fields_present = get_fields_present(json_data)
-            unique_fields_present = get_unique_fields_present(json_data)
-        dataset['datagetter_coverage'] = {}
-        for field in fields_present:
-            dataset['datagetter_coverage'][field] = {
-                'total_fields': fields_present[field],
-                'grants_with_field': unique_fields_present.get(field),
-                'standard': field in schema_fields,
-            }
-    stats.append(dataset)
+        try:
+            with open(json_filename) as fp:
+                json_data = json.load(fp)
+                fields_present = get_fields_present(json_data)
+                unique_fields_present = get_unique_fields_present(json_data)
+
+                dataset['datagetter_coverage'] = {}
+                for field in fields_present:
+                    dataset['datagetter_coverage'][field] = {
+                        'total_fields': fields_present[field],
+                        'grants_with_field': unique_fields_present.get(field),
+                        'standard': field in schema_fields,
+                    }
+                stats.append(dataset)
+        except FileNotFoundError as e:
+            print(e)
+
     with open('data/coverage.json', 'w') as fp:
         json.dump(stats, fp, indent='  ', sort_keys=True)
