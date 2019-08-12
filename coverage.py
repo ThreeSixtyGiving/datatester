@@ -1,9 +1,10 @@
 import os
 import json
 import collections
-from cove.lib.common import get_fields_present, fields_present_generator
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'cove_360.settings'
+
+from libcove.lib.common import get_fields_present, fields_present_generator
 from cove_360.lib.schema import Schema360
 
 
@@ -13,7 +14,9 @@ def unique_fields_present_generator(json_data):
     if 'grants' not in json_data:
         return
     for grant in json_data['grants']:
-        for field in set(fields_present_generator(grant)):
+        # Flatten the key,val pairs so we can make a unique list of fields
+        field_list = [field for field, value in fields_present_generator(grant)]
+        for field in set(field_list):
             yield '/grants' + field
 
 
@@ -23,7 +26,7 @@ def get_unique_fields_present(*args, **kwargs):
     return dict(counter)
 
 
-data_all = json.load(open('data/status.json')) 
+data_all = json.load(open('data/status.json'))
 stats = []
 
 schema_obj = Schema360()
