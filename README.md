@@ -1,8 +1,8 @@
-# 360Giving datagetter
+# 360Giving datatester
 
-datagetter is a tool to download 360Giving data that is listed on the [360Giving Registry](http://data.threesixtygiving.org). It is used to load [GrantNav](http://grantnav.threesixtygiving.org), and can be used by anyone needing to obtain 360Giving data directly from publishers.
+datatester is a tool to test 360Giving data that is listed on the [360Giving Registry](http://data.threesixtygiving.org). It is used to load [GrantNav](http://grantnav.threesixtygiving.org), and can be used by anyone needing to obtain 360Giving data directly from publishers.
 
-This repo also contains scripts to produce a number of reports on the data, which is run nightly on [TravisCI](https://travis-ci.com/ThreeSixtyGiving/datagetter/builds):
+This repo also contains scripts to produce a number of reports on the data, which is run nightly on [TravisCI](https://travis-ci.com/ThreeSixtyGiving/datatester/builds):
 
 ### status.json
 
@@ -30,7 +30,7 @@ Run:
 mkdir -p data/{original,json_all,json_valid,json_acceptable_license,json_acceptable_license_valid}
 python get.py
 
-When running the datagetter, you may see several UserWarnings from python while running the script. You can happily ignore most of those that don't cause the program to fail. Run report.py, then read data/report.csv to review what datasets have been downloaded.
+When running the datatester, you may see several UserWarnings from python while running the script. You can happily ignore most of those that don't cause the program to fail. Run report.py, then read data/report.csv to review what datasets have been downloaded.
 ```
 
 Generating a report of what data was downloaded/converted/valid:
