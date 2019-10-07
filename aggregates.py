@@ -20,13 +20,13 @@ def replace_none_keys(nested_data):
         for item in nested_data:
             replace_none_keys(item)
 
-data_all = json.load(open('data/data_all.json')) 
+data_all = json.load(open('data/data_all.json'))
 stats = []
 
 for dataset in data_all:
     json_filename = dataset['datagetter_metadata'].get('json')
     if json_filename:
-        with open(json_filename) as fp:
+        with open(json_filename, encoding='utf-8') as fp:
             aggregates = get_grants_aggregates(json.load(fp))
         # replace sets with counts
         for k, v in list(aggregates.items()):
