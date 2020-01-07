@@ -13,7 +13,6 @@ do
 done
 rm -r data || true
 echo 'Fetching and converting data'
-echo $PATH
 datagetter.py $@
 bash generate-reports.sh
 echo 'Creating tarball'
