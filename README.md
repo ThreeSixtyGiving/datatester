@@ -18,7 +18,7 @@ A [CSV report](https://gist.github.com/30d835ae16e2a30efde8a63acf03628d) of all 
 Install dependencies:
 
 ```
-python3 -m virtualenv -p $(which python3) .ve
+python3 -m venv .ve
 source .ve/bin/activate
 pip install -r requirements.txt
 ```

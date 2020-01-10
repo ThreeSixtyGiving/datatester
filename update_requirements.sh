@@ -2,7 +2,7 @@
 # This follows broadly the approach from
 # http://www.kennethreitz.org/essays/a-better-pip-workflow
 rm -rf .ve
-virtualenv --python=python3 .ve
+python3 -m venv .ve
 source .ve/bin/activate
 if [[ "$1" == "--new-only" ]]; then
     # If --new-only is supplied then we install the current versions of
