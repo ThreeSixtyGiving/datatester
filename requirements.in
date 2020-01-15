@@ -1,16 +1,10 @@
 
 -e git+https://github.com/threesixtygiving/datagetter.git@master#egg=datagetter
+-e git+https://github.com/OpenDataServices/cove.git@master#egg=cove
 
 #  These are currently requirements for cove (which are not availabe on pypi)
 #  see https://github.com/OpenDataServices/cove/blob/master/requirements.in
-#Django<1.12
-##########^^ rq.filter: <1.12
--e git+https://github.com/OpenDataServices/flatten-tool.git@v0.7.0#egg=flattentool
--e git+https://github.com/open-contracting/lib-cove-ocds.git@v0.7.0#egg=libcoveocds
--e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.9.1#egg=libcoveweb
--e git+https://github.com/OpenDataServices/lib-cove.git@v0.7.0#egg=libcove
-
--e git+https://github.com/OpenDataServices/cove.git@master#egg=cove
+-e git+https://github.com/OpenDataServices/lib-cove-web.git@v0.10.0#egg=libcoveweb
 #  end cove requirements
 
 ijson
