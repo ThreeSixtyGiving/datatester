@@ -34,8 +34,9 @@ schema_fields = schema_obj.get_release_pkg_schema_fields()
 
 
 for dataset in data_all:
-    json_filename = dataset['datagetter_metadata'].get('json')
-    if json_filename:
+    json_filename = "data/json_all/%s.json" % dataset['identifier']
+    # Check that we had a location where json_filename file downloaded to
+    if dataset['datagetter_metadata'].get('json'):
         with open(json_filename) as fp:
             json_data = json.load(fp)
             fields_present = get_fields_present(json_data)
