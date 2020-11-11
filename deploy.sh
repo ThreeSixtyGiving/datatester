@@ -45,4 +45,6 @@ PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 gem install gist --user-install
 
-gist -u $GIST_SHA $DEPLOY_DIR/$PREFIX\_report.csv
+gist -u 30d835ae16e2a30efde8a63acf03628d $DEPLOY_DIR/$PREFIX\_report.csv
+gist -u 0ce4a96df3c8cd773079152552ae1381 $DEPLOY_DIR/$PREFIX\_coverage.json
+gist -u cd8c12e426157478e2e8a537f99ecaef $DEPLOY_DIR/$PREFIX\_status.json
