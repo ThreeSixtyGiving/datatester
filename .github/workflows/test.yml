@@ -17,3 +17,11 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}-${{ hashFiles('**/requirements_dev.txt') }}
 
     - run: pip install -r requirements.txt
+    - name: Fetch Data Package
+      env:
+        DATASTORE_PASS: ${{ secrets.DATASTORE_PASS }}
+      run: wget http://github@store.data.threesixtygiving.org/grantnav_packages/latest_grantnav_data.tar.gz --http-password=$DATASTORE_PASS
+    - name: Run datatester
+      run: |
+        tar -xf ./latest_grantnav_data.tar.gz
+        bash generate-reports.sh
