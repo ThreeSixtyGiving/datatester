@@ -30,7 +30,7 @@ data_all = json.load(open('data/status.json'))
 stats = []
 
 schema_obj = Schema360()
-schema_fields = schema_obj.get_release_pkg_schema_fields()
+schema_fields = schema_obj.get_pkg_schema_fields()
 
 
 for dataset in data_all:
