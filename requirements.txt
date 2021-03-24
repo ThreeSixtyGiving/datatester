@@ -13,8 +13,16 @@ attrs==19.3.0
     #   cove
     #   datagetter
     #   jsonschema
+backports-datetime-fromisoformat==1.0.0
+    # via
+    #   cove
+    #   flattentool
 bleach==3.3.0
     # via cove
+btrees==4.7.2
+    # via
+    #   cove
+    #   zodb
 cached-property==1.5.1
     # via
     #   cove
@@ -26,6 +34,10 @@ certifi==2020.6.20
     #   datagetter
     #   requests
     #   sentry-sdk
+cffi==1.14.5
+    # via
+    #   cove
+    #   persistent
 chardet==3.0.4
     # via
     #   cove
@@ -65,12 +77,12 @@ django==2.2.15
     #   cove
     #   django-debug-toolbar
     #   libcoveweb
-et-xmlfile==1.0.1
+et_xmlfile==1.0.1
     # via
     #   cove
     #   datagetter
     #   openpyxl
-flattentool==0.15.2
+flattentool==0.16.0
     # via
     #   cove
     #   datagetter
@@ -80,8 +92,11 @@ idna==2.10
     #   cove
     #   datagetter
     #   requests
-ijson==2.4
-    # via -r requirements.in
+ijson==3.1.4
+    # via
+    #   -r requirements.in
+    #   cove
+    #   flattentool
 importlib-metadata==1.7.0
     # via
     #   cove
@@ -139,6 +154,15 @@ openpyxl==2.6.4
 packaging==20.4
     # via
     #   bleach
+    #   cove
+persistent==4.6.4
+    # via
+    #   btrees
+    #   cove
+    #   zodb
+pycparser==2.20
+    # via
+    #   cffi
     #   cove
 pyparsing==2.4.7
     # via
@@ -202,6 +226,7 @@ six==1.15.0
     #   packaging
     #   pyrsistent
     #   python-dateutil
+    #   zodb
 sqlparse==0.3.1
     # via
     #   cove
@@ -213,6 +238,10 @@ strict-rfc3339==0.7
     #   datagetter
     #   libcove
     #   libcoveweb
+transaction==3.0.1
+    # via
+    #   cove
+    #   zodb
 urllib3==1.25.10
     # via
     #   cove
@@ -229,12 +258,41 @@ xmltodict==0.12.0
     #   datagetter
     #   flattentool
     #   libcoveweb
+zc.lockfile==2.0
+    # via
+    #   cove
+    #   zodb
+zc.zlibstorage==1.2.0
+    # via
+    #   cove
+    #   flattentool
+zconfig==3.5.0
+    # via
+    #   cove
+    #   zodb
 zipp==1.2.0
     # via
     #   cove
     #   datagetter
     #   importlib-metadata
     #   libcoveweb
+zodb==5.6.0
+    # via
+    #   cove
+    #   flattentool
+    #   zc.zlibstorage
+zodbpickle==2.0.0
+    # via
+    #   cove
+    #   zodb
+zope.interface==5.3.0
+    # via
+    #   btrees
+    #   cove
+    #   persistent
+    #   transaction
+    #   zc.zlibstorage
+    #   zodb
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
