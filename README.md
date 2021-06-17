@@ -1,3 +1,8 @@
+*
+# _This repository has been superceeded by [dataquality](https://github.com/ThreeSixtyGiving/dataquality). The scripts from the datatester can be found in the "tools" directory of dataquality_
+*
+
+
 # 360Giving datatester
 
 datatester is a tool to test 360Giving data that is listed on the [360Giving Registry](http://data.threesixtygiving.org). It is used to load [GrantNav](http://grantnav.threesixtygiving.org), and can be used by anyone needing to obtain 360Giving data directly from publishers.
